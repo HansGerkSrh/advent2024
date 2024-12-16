@@ -9,7 +9,7 @@ def findNumOne(list_input):
         else:
             i += 1
         
-    return(list_input[k])
+    return(list_input[k][0])
 
 def check_number(number,wanted_numbers):
     i = 0
@@ -31,3 +31,12 @@ def get_relevant_list(list_input,wanted_numbers):
     return sorted_list
 
 
+def del_excluded_num(new_list_input,excluded_num):
+    k = 0
+    while k < len(new_list_input):
+        if new_list_input[k][0] == excluded_num:
+            del new_list_input[k]
+            k-=1
+        k += 1
+            
+    return new_list_input

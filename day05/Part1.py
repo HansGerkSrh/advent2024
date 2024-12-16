@@ -31,8 +31,48 @@ while i < len(page_num_input_array):
 #     print(str(page_num_input_array[i]))
 
 i = 0
+full_printorder = []
+while i < len(page_num_input_array):
+    current_list = []
+
+    current_list = get_relevant_list(ordering_rules_input_array,page_num_input_array[i])
+
+    #print(f'Nr. {i} : {current_list} \n')
+
+    # print(findNumOne(current_list))
+    
+    printorder = []
+    while len(current_list) > 1:
+
+        excluding_num = findNumOne(current_list)
+        printorder.append(excluding_num)
+        current_list = del_excluded_num(current_list,excluding_num)
+
+        # print(current_list)
+        # print(printorder)
+
+    printorder.append(current_list[0][0])
+    printorder.append(current_list[0][1])
+    # print(printorder)
+    full_printorder.append(printorder)
+    i += 1
 
 
-x = get_relevant_list(ordering_rules_input_array,page_num_input_array[i])
-print(f'Nr. {i} : {x} \n')
-  
+
+calculating_list = []
+i = 0
+while i < len(full_printorder):
+    if full_printorder[i] == page_num_input_array[i]:
+        calculating_list.append(full_printorder[i])
+    i += 1
+
+sum = 0
+i = 0
+
+
+
+while i < len(calculating_list):
+    sum += int(calculating_list[i][len(calculating_list[i])//2])
+    i+= 1
+
+print(sum)
