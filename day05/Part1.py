@@ -71,7 +71,7 @@ while i < len(page_num_input_array):
 calculating_list = []
 i = 0
 while i < len(full_printorder):
-    if full_printorder[i] == page_num_input_array[i]:
+    if full_printorder[i] == page_num_input_array[i]: 
         calculating_list.append(full_printorder[i])
     i += 1
 
