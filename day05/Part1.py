@@ -1,7 +1,7 @@
 from scripts_Part1 import *
 import re
 
-####+# File Import ######
+##### File Import ######
 
 with open(r'day05\Input.txt', 'r') as text_file:
     
