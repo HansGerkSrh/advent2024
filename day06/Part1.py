@@ -3,7 +3,7 @@ import re
 
 ##### File Import ######
 
-with open(r'day06\Input.txt', 'r') as text_file:
+with open(r'day06/Input.txt', 'r') as text_file:
     
     inputlist = text_file.read().splitlines()
     text_file.close()
