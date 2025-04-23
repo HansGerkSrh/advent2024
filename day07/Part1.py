@@ -1,4 +1,5 @@
-from scripts_Part1 import *
+#from scripts_Part1 import *
+import operator
 import re
 
 ##### File Import ######
@@ -27,25 +28,45 @@ def permutation_generator(operator_amount, dimension):
         for digit in range(dimension):
             result.append(i + [digit])
     return result
+
+
+def determine_numbers(inputnumbers,operator_list,ops): #function that gets a set of numbers and a set of operators and returns the reult of the calculation
     
-print(permutation_generator(4,2))
-
-
-def check_testvalue(inputlist_transformed,dimension):
+    result = int(inputnumbers[1]) #variable to add each operation reslut onto, starts with first number (0 is the test number)
     i = 1
-    operator_amount = (len(inputlist_transformed)-2) #how many operators are going to be used
-    while i < (2^operator_amount): #possible different permutations of the arrangement of the opperators   
-        if inputlist_transformed[0] == num:
-            return True
+    while i < len(inputnumbers)-1: 
+        result = ops[operator_list[i-1]](result,int(inputnumbers[i+1]))  #executes the operator based on the ops Dictonary that gets defined at the start
+        i += 1
+    return result
 
+
+def check_testvalue(inputnumbers,dimension,ops):
+    i = 0
+    operator_amount = (len(inputnumbers)-2) #how many operators are going to be used
+    operator_permutations = permutation_generator(operator_amount,dimension)
+    while i < len(operator_permutations): #possible different permutations of the arrangement of the opperators   
+        if int(inputnumbers[0]) == determine_numbers(inputnumbers,operator_permutations[i],ops): 
+            return True
+        i += 1
+    return False
+
+#define the operator alias to use the generated permuation values as operators
+ops = {   
+        0: operator.add, 
+        1: operator.mul
+        }
+
+dimension = len(ops)
 
 resultsum = 0
 j = 0
 while j < len(inputlist_transformed):
-    if check_testvalue(inputlist_transformed) == True: #chekcs if teh current Line is a Valid equation according to the challange rules
+    if check_testvalue(inputlist_transformed[j],dimension,ops) == True: #checks if the current Line is a Valid equation according to the challange rules
         resultsum += int(inputlist_transformed[j][0]) #if true adds the test Value to the result 
     j += 1
 
 print(resultsum)
+
+
 
 
