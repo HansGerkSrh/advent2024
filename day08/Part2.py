@@ -3,6 +3,10 @@ Task description: https://adventofcode.com/2024/day/8 (you need to put in the so
 
 in short: 
 -Now every point on a line where 2 anennas are, counts as a antinode location 
+
+-mostly the same code as day one: 
+    -removed the part ##### filtering out impossible solution #####
+    -updated code in the part ##### calculating antinode values ##### to fit the new parameters
 """
 
 import re 
