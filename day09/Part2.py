@@ -1,44 +1,14 @@
-"""
-Task description: https://adventofcode.com/2024/day/9
-"""
-
-def generate_file_data(inputlist):
-    """
-    Turns original Input like:
-    2333133121414131402
-    into the File we need 
-    00...111...2...333.44.5555.6666.777.888899
-    and retuns it as a list of each digit
-    """
-
-    resultlist = []
-    i = 0
-    charindex = 0
-    for chars in inputlist:
-        if i % 2 == 0:
-            #verarbeitung Files
-            for gapsize in range(int(chars)):
-                resultlist.append(charindex)
-            charindex += 1
-        else:
-            #verarbeitung Gaps
-            for gapsize in range(int(chars)):
-                resultlist.append(None)
-        i += 1
-    return resultlist
-
-
 def block_update(inputlist):
     resultlist = []
     i = 0
     charindex = 0
     for chars in inputlist:
-        resultlist.append([int(chars),[]])
+        resultlist.append([])
         if i % 2 == 0:
             #verarbeitung Files
             k = 0
             while k < int(chars):
-                resultlist[i][1].append(charindex)
+                resultlist[i].append(charindex)
                 k += 1
             charindex += 1
             
@@ -46,56 +16,82 @@ def block_update(inputlist):
             #verarbeitung Gaps
             k = 0
             while k < int(chars):
-                resultlist[i][1].append(None)
+                resultlist[i].append(None)
                 k += 1
             
         i += 1
-
-    #print(resultlist)
-
-    i = -1
-    while abs(i) < len(resultlist):
-        k = 1
-        while k < len(resultlist):
-            if resultlist[k][0] >= resultlist[i][0]:
-                j = 0
-                delcounter = 0
-                while j < len(resultlist[k][1]) and (delcounter < resultlist[i][0]):
-                    if resultlist[k][1][j] is None:
-                        resultlist[k][1][j] = resultlist[i][1][delcounter]
-                        resultlist[i][1][delcounter] = None
-                        delcounter += 1
-                    j += 1
-                    
-                resultlist[k][0] = resultlist[k][0] - resultlist[i][0]
-                break
-            k += 2
-        i -= 2
-
-    #print(resultlist)
     return resultlist
 
+#print(block_update("2333133121414131402"))
+
+def determine_block_space (data_block:list):
+    freepace_startpoint = 0
+    for char in data_block:
+        if char is not None:
+            freepace_startpoint += 1
+    block_space = len(data_block) - freepace_startpoint
+    return block_space, freepace_startpoint
+
+# x,y = determine_block_space([0,0,2,None,None,None,None])
+# print(x,y)
+
+
+def update_filesys(filelist):
+    downcount = -1
+    while abs(downcount) < len(filelist):
+        if not determine_block_space(filelist[downcount])[0]:
+            blocklenght = len(filelist[downcount])
+            upcount = 0
+            while upcount < len(filelist) + downcount:
+                block_space, startpoint = determine_block_space(filelist[upcount])
+                if block_space >= blocklenght:
+                    i = 0
+                    while i < len(filelist[downcount]):
+                        filelist[upcount][startpoint] = filelist[downcount][i]
+                        filelist[downcount][i] = None
+                        i += 1
+                        startpoint += 1
+                    break
+                upcount += 1
+        downcount -= 1
+
+    return filelist
+
+def print_as_string(filelist):
+    x = filelist
+    retstring = ""
+    for i in x:
+        for char in i:
+            if char is not None:
+                retstring += str(char)
+            else:
+                retstring += "."  
+    print(retstring)
+
+def checksum(filelist):
+    numlist = []
+    for lists in filelist:
+        for number in lists:
+            numlist.append(number)
+
+    i = 0
+    returnsum = 0
+    while i < len(numlist):
+        if numlist[i] is not None:
+            returnsum += i * numlist[i]
+        i += 1
+
+    return returnsum
 
 with open(r'day09/Input.txt', 'r') as text_file:
     text = text_file.read()
     inputlist = text
 
 
-
-def calc_checksum(resultlist):
-    numlist = []
-    for i in resultlist:
-        print(i)
-        for number in i[1]:
-            numlist.append(number)
-    checksum = 0
-    i = 0
-    for num in numlist: 
-        if num is not None: 
-            checksum += i * num
-        i += 1
-    return checksum            
-
-
-x = block_update("2333133121414131402")
-print(calc_checksum(x))
+input = inputlist
+resultlist = block_update(input)
+print(str(resultlist) + "\n")
+filelist = update_filesys(resultlist)
+print(str(filelist) + "\n")
+sum = checksum(filelist)
+print(sum)
