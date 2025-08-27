@@ -16,4 +16,3 @@ with open(r'day10/Input.txt', 'r') as text_file:
 
     for i in inputlist:
         print(i)
-        fffff
